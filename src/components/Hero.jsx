@@ -1,9 +1,47 @@
-import { motion } from 'framer-motion'
-import { useState } from 'react'
+import { motion, useMotionValue, useTransform } from 'framer-motion'
+import { useRef, useState, useEffect } from 'react'
 import AgeModal from './AgeModal'
+import palm from '../assets/palm.svg'
+import ring from '../assets/float-ring.svg'
+import kidBoy from '../assets/kid-boy.svg'
+import kidGirl from '../assets/kid-girl.svg'
 
 export default function Hero() {
   const [open, setOpen] = useState(false)
+  const containerRef = useRef(null)
+
+  // Parallax motion values based on pointer position
+  const mx = useMotionValue(0)
+  const my = useMotionValue(0)
+
+  useEffect(() => {
+    const el = containerRef.current
+    if (!el) return
+
+    const onMove = (e) => {
+      const rect = el.getBoundingClientRect()
+      const x = (e.clientX - rect.left) / rect.width // 0..1
+      const y = (e.clientY - rect.top) / rect.height // 0..1
+      mx.set((x - 0.5) * 2) // -1..1
+      my.set((y - 0.5) * 2) // -1..1
+    }
+    const onLeave = () => {
+      mx.set(0); my.set(0)
+    }
+
+    el.addEventListener('pointermove', onMove)
+    el.addEventListener('pointerleave', onLeave)
+    return () => {
+      el.removeEventListener('pointermove', onMove)
+      el.removeEventListener('pointerleave', onLeave)
+    }
+  }, [mx, my])
+
+  // Parallax helpers (depth = how far it moves)
+  const layer = (depthX, depthY) => ({
+    x: useTransform(mx, v => v * depthX),
+    y: useTransform(my, v => v * depthY)
+  })
 
   const float = (delay = 0, y = 10, duration = 3) => ({
     animate: { y: [0, -y, 0] },
@@ -11,26 +49,32 @@ export default function Hero() {
   })
 
   return (
-    <section className="relative overflow-hidden">
-      {/* SUMMER SKY BACKGROUND */}
+    <section ref={containerRef} className="relative overflow-hidden">
+      {/* ANIMATED PARALLAX SKY BACKGROUND */}
       <div className="absolute inset-0 -z-10">
-        {/* Sunset gradient sky */}
-        <div className="absolute inset-0 bg-gradient-to-b from-rose-400 via-amber-300 to-sky-300" />
+        {/* Sunset gradient sky (slight parallax) */}
+        <motion.div
+          style={layer(-10, -6)}
+          className="absolute inset-0 bg-gradient-to-b from-rose-400 via-amber-300 to-sky-300" />
+
         {/* Sun glow */}
         <motion.div
-          initial={{ scale: 0.8, opacity: 0 }}
+          style={layer(-24, -14)}
+          initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 0.9 }}
           transition={{ duration: 0.9 }}
           className="absolute -top-24 left-1/2 -translate-x-1/2 w-[56rem] h-[56rem] rounded-full bg-[radial-gradient(circle_at_center,_rgba(255,255,255,0.75),_rgba(255,255,255,0)_60%)]"/>
+
         {/* Soft clouds */}
-        <motion.div {...float(0.2, 8, 6)} className="absolute top-10 left-10 w-64 h-32 rounded-full blur-2xl bg-white/50" />
-        <motion.div {...float(0.6, 10, 7)} className="absolute top-24 right-12 w-72 h-36 rounded-full blur-2xl bg-white/40" />
-        <motion.div {...float(1.1, 7, 5.5)} className="absolute top-40 left-1/3 w-52 h-24 rounded-full blur-xl bg-white/40" />
+        <motion.div style={layer(30, 16)} {...float(0.2, 8, 6)} className="absolute top-10 left-10 w-64 h-32 rounded-full blur-2xl bg-white/50" />
+        <motion.div style={layer(-36, 18)} {...float(0.6, 10, 7)} className="absolute top-24 right-12 w-72 h-36 rounded-full blur-2xl bg-white/40" />
+        <motion.div style={layer(18, 12)} {...float(1.1, 7, 5.5)} className="absolute top-40 left-1/3 w-52 h-24 rounded-full blur-xl bg-white/40" />
+
         {/* Horizon shimmer */}
-        <div className="absolute inset-x-0 bottom-0 h-64 bg-gradient-to-t from-amber-200/60 via-amber-100/20 to-transparent" />
+        <motion.div style={layer(0, -8)} className="absolute inset-x-0 bottom-0 h-64 bg-gradient-to-t from-amber-200/60 via-amber-100/20 to-transparent" />
       </div>
 
-      <div className="max-w-6xl mx-auto px-6 pt-24 pb-20 grid lg:grid-cols-2 gap-12 items-center">
+      <div className="max-w-6xl mx-auto px-6 pt-24 pb-24 grid lg:grid-cols-2 gap-12 items-center">
         {/* COPY */}
         <div>
           <motion.h1
@@ -73,7 +117,7 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* ILLUSTRATED SUMMER SCENE */}
+        {/* ILLUSTRATED SUMMER SCENE (SVG + Parallax) */}
         <div className="relative">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
@@ -81,57 +125,47 @@ export default function Hero() {
             transition={{ duration: 0.7 }}
             className="relative mx-auto w-full max-w-md"
           >
-            {/* Card with Pixar-ish glossy glass */}
-            <div className="aspect-[4/3] rounded-[28px] p-1 shadow-2xl bg-gradient-to-br from-sky-400 to-fuchsia-400">
-              <div className="w-full h-full rounded-[24px] bg-white/20 backdrop-blur-xl relative overflow-hidden">
-                {/* Sea */}
-                <div className="absolute bottom-0 inset-x-0 h-1/2 bg-gradient-to-t from-sky-400/80 via-sky-300/70 to-transparent" />
-                {/* Sand */}
-                <div className="absolute bottom-0 inset-x-0 h-1/3 bg-gradient-to-t from-amber-300/90 via-amber-200/80 to-transparent" />
-
-                {/* Floating items */}
-                <motion.div {...float(0.1, 8, 4.5)} className="absolute left-6 bottom-24 text-5xl">🏖️</motion.div>
-                <motion.div {...float(0.4, 10, 5)} className="absolute right-8 bottom-28 text-5xl">🪁</motion.div>
-                <motion.div {...float(0.7, 6, 4)} className="absolute left-1/2 -translate-x-1/2 bottom-20 text-5xl">🏄‍♂️</motion.div>
-                <motion.div {...float(1.2, 7, 5.2)} className="absolute left-10 bottom-6 text-4xl">⭐</motion.div>
-                <motion.div {...float(1.5, 9, 5.8)} className="absolute right-12 bottom-8 text-5xl">🏖️</motion.div>
-                <motion.div {...float(1.8, 12, 6.2)} className="absolute left-8 top-8 text-5xl">🌴</motion.div>
-
-                {/* Kids icons grid like stickers */}
-                <motion.div
-                  initial="hidden"
-                  animate="show"
-                  variants={{ hidden: {}, show: { transition: { staggerChildren: 0.06 } } }}
-                  className="absolute inset-x-6 top-6 grid grid-cols-3 gap-3"
-                >
-                  {['🎨','🎭','🎵','📚','🤹','🧠','📐','🤖','🧘'].map((e, i) => (
-                    <motion.div
-                      key={i}
-                      variants={{ hidden: { y: 12, opacity: 0 }, show: { y: 0, opacity: 1 } }}
-                      whileHover={{ scale: 1.06, rotate: [0, -3, 3, 0] }}
-                      transition={{ type: 'spring', stiffness: 220, damping: 16 }}
-                      className="aspect-square rounded-2xl bg-white/30 border border-white/40 flex items-center justify-center text-3xl shadow-[0_6px_20px_rgba(255,255,255,0.35)]"
-                    >
-                      <span className="drop-shadow-lg">{e}</span>
-                    </motion.div>
-                  ))}
+            {/* Card container */}
+            <div className="aspect-[4/3] rounded-[28px] shadow-2xl bg-gradient-to-br from-sky-400 to-fuchsia-400 p-[2px]">
+              <div className="w-full h-full rounded-[26px] bg-white/20 backdrop-blur-xl relative overflow-hidden">
+                {/* Animated sea waves using SVG */}
+                <motion.div style={layer(-20, -6)} className="absolute bottom-0 inset-x-0 h-1/2">
+                  <svg className="absolute bottom-12 left-0 w-full" viewBox="0 0 1440 120" preserveAspectRatio="none">
+                    <path d="M0,80 C160,120 320,40 480,80 C640,120 800,40 960,80 C1120,120 1280,40 1440,80 L1440,0 L0,0 Z" fill="#38bdf8" fillOpacity="0.75">
+                      <animate attributeName="d" dur="6s" repeatCount="indefinite" values="M0,80 C160,120 320,40 480,80 C640,120 800,40 960,80 C1120,120 1280,40 1440,80 L1440,0 L0,0 Z; M0,82 C160,122 320,42 480,82 C640,122 800,42 960,82 C1120,122 1280,42 1440,82 L1440,0 L0,0 Z; M0,78 C160,118 320,38 480,78 C640,118 800,38 960,78 C1120,118 1280,38 1440,78 L1440,0 L0,0 Z; M0,80 C160,120 320,40 480,80 C640,120 800,40 960,80 C1120,120 1280,40 1440,80 L1440,0 L0,0 Z" />
+                    </path>
+                  </svg>
+                  <svg className="absolute bottom-6 left-0 w-full" viewBox="0 0 1440 120" preserveAspectRatio="none">
+                    <path d="M0,90 C180,130 360,50 540,90 C720,130 900,50 1080,90 C1260,130 1440,50 1620,90 L1620,0 L0,0 Z" fill="#0ea5e9" fillOpacity="0.75">
+                      <animate attributeName="d" dur="7s" repeatCount="indefinite" values="M0,90 C180,130 360,50 540,90 C720,130 900,50 1080,90 C1260,130 1440,50 1620,90 L1620,0 L0,0 Z; M0,92 C180,132 360,52 540,92 C720,132 900,52 1080,92 C1260,132 1440,52 1620,92 L1620,0 L0,0 Z; M0,88 C180,128 360,48 540,88 C720,128 900,48 1080,88 C1260,128 1440,48 1620,88 L1620,0 L0,0 Z; M0,90 C180,130 360,50 540,90 C720,130 900,50 1080,90 C1260,130 1440,50 1620,90 L1620,0 L0,0 Z" />
+                    </path>
+                  </svg>
                 </motion.div>
 
-                {/* Sparkles */}
-                <motion.div {...float(0.3, 6, 3.8)} className="absolute top-6 right-6 text-3xl">✨</motion.div>
-                <motion.div {...float(0.9, 6, 4.1)} className="absolute top-10 left-8 text-3xl">✨</motion.div>
+                {/* Sand layer with curve */}
+                <motion.svg style={layer(8, 10)} className="absolute bottom-0 left-0 w-full" viewBox="0 0 1440 160" preserveAspectRatio="none">
+                  <path d="M0,110 C120,150 360,60 600,110 C840,160 1080,60 1320,110 C1440,138 1440,160 1440,160 L0,160 Z" fill="#fde68a" />
+                </motion.svg>
+
+                {/* Palm and float ring assets */}
+                <motion.img style={layer(12, 6)} {...float(0.3, 8, 4.6)} src={palm} alt="Palmera" className="absolute left-4 bottom-28 w-24 drop-shadow-lg" />
+                <motion.img style={layer(-10, 8)} {...float(0.6, 10, 5)} src={ring} alt="Flotador" className="absolute right-6 bottom-24 w-24 drop-shadow-lg" />
+
+                {/* Kids characters for target audience clarity */}
+                <motion.img style={layer(-6, 4)} {...float(0.2, 6, 5)} src={kidBoy} alt="Niño feliz" className="absolute left-24 bottom-16 w-24 drop-shadow-xl" />
+                <motion.img style={layer(6, 4)} {...float(0.4, 6, 5.5)} src={kidGirl} alt="Niña feliz" className="absolute right-24 bottom-16 w-24 drop-shadow-xl" />
               </div>
             </div>
           </motion.div>
         </div>
       </div>
 
-      {/* Decorative wave divider */}
-      <div className="absolute bottom-0 inset-x-0 -mb-1">
+      {/* Decorative wave divider with subtle drift */}
+      <motion.div style={layer(10, 0)} className="absolute bottom-0 inset-x-0 -mb-1">
         <svg className="w-full h-16 text-amber-200/70" viewBox="0 0 1440 100" preserveAspectRatio="none" fill="currentColor">
           <path d="M0,67 C150,120 350,0 600,67 C850,134 1050,0 1200,67 C1350,134 1440,67 1440,67 L1440,150 L0,150 Z"></path>
         </svg>
-      </div>
+      </motion.div>
 
       <AgeModal open={open} onClose={() => setOpen(false)} />
     </section>
