@@ -12,7 +12,7 @@ export default function CTAForm(){
   const [status, setStatus] = useState(null)
   const [form, setForm] = useState({
     parent_name: '', parent_email: '', parent_phone: '',
-    child_name: '', child_age: '', program: 'Mini Kids (4-6)', sede: 'San Isidro',
+    child_name: '', child_age: '', program: 'Mini Kids (4-5 y 5-6)', sede: 'San Isidro',
     courses: [], message: ''
   })
 
@@ -87,7 +87,7 @@ export default function CTAForm(){
               <div>
                 <label className="text-sm text-white/80">Programa</label>
                 <select value={form.program} onChange={e=>setForm({...form, program:e.target.value})} className="mt-1 w-full px-4 py-2 rounded-xl bg-white/10 border border-white/20">
-                  <option>Mini Kids (4-6)</option>
+                  <option>Mini Kids (4-5 y 5-6)</option>
                   <option>Kids (7-13)</option>
                 </select>
               </div>

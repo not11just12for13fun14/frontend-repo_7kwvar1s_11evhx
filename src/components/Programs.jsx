@@ -41,9 +41,10 @@ export default function Programs(){
         <div className="mt-10 grid lg:grid-cols-2 gap-8">
           <div className="rounded-3xl p-6 border border-pink-200/20 bg-gradient-to-br from-pink-400/10 via-fuchsia-400/10 to-amber-300/10">
             <div className="flex items-center gap-3">
-              <Badge>4 a 6 años</Badge>
+              <Badge>4-5 y 5-6 años</Badge>
               <h3 className="text-2xl font-semibold text-white">Mini Kids</h3>
             </div>
+            <p className="text-white/80 mt-2">Dos subniveles para acompañar mejor su desarrollo: 4-5 años y 5-6 años.</p>
             <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-5">
               {miniKids.map((c,i)=> (
                 <li key={i} className="text-white/90 flex items-start gap-2"><span>•</span><span>{c}</span></li>
