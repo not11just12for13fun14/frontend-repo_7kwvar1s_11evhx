@@ -3,36 +3,13 @@
 > vite
 
 
-  VITE v5.4.20  ready in 256 ms
+  VITE v5.4.20  ready in 246 ms
 
   ➜  Local:   http://localhost:3000/
   ➜  Network: http://172.20.6.207:3000/
-1:07:44 AM [vite] Pre-transform error: Transform failed with 1 error:
+1:16:43 AM [vite] Pre-transform error: Transform failed with 1 error:
 /home/workspace/src/components/Hero.jsx:102:145: ERROR: Expected identifier after "http:" in namespaced JSX name
-1:07:45 AM [vite] Internal server error: Transform failed with 1 error:
-/home/workspace/src/components/Hero.jsx:102:145: ERROR: Expected identifier after "http:" in namespaced JSX name
-  Plugin: vite:esbuild
-  File: /home/workspace/src/components/Hero.jsx:102:145
-  
-  Expected identifier after "http:" in namespaced JSX name
-  100|  
-  101|          {/* Subtle film grain for a more cinematic, soft-3D feel */}
-  102|          <div className="pointer-events-none absolute inset-0 opacity-[0.06] mix-blend-overlay bg-[url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100\" height=\"100\" viewBox=\"0 0 100 100\"><filter id=\"n\"><feTurbulence type=\"fractalNoise\" baseFrequency=\"0.8\" numOctaves=\"2\" stitchTiles=\"stitch\"/></filter><rect width=\"100%\" height=\"100%\" filter=\"url(%23n)\" opacity=\"0.4\"/></svg>')]" />
-     |                                                                                                                                                   ^
-  103|        </div>
-  104|  
-  
-      at failureErrorWithLog (/home/workspace/node_modules/esbuild/lib/main.js:1472:15)
-      at /home/workspace/node_modules/esbuild/lib/main.js:755:50
-      at responseCallbacks.<computed> (/home/workspace/node_modules/esbuild/lib/main.js:622:9)
-      at handleIncomingPacket (/home/workspace/node_modules/esbuild/lib/main.js:677:12)
-      at Socket.readFromStdout (/home/workspace/node_modules/esbuild/lib/main.js:600:7)
-      at Socket.emit (node:events:508:28)
-      at addChunk (node:internal/streams/readable:559:12)
-      at readableAddChunkPushByteMode (node:internal/streams/readable:510:3)
-      at Readable.push (node:internal/streams/readable:390:5)
-      at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
-1:07:46 AM [vite] Internal server error: Transform failed with 1 error:
+1:16:43 AM [vite] Internal server error: Transform failed with 1 error:
 /home/workspace/src/components/Hero.jsx:102:145: ERROR: Expected identifier after "http:" in namespaced JSX name
   Plugin: vite:esbuild
   File: /home/workspace/src/components/Hero.jsx:102:145
@@ -55,7 +32,7 @@
       at readableAddChunkPushByteMode (node:internal/streams/readable:510:3)
       at Readable.push (node:internal/streams/readable:390:5)
       at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
-1:07:51 AM [vite] Internal server error: Transform failed with 1 error:
+1:17:12 AM [vite] Internal server error: Transform failed with 1 error:
 /home/workspace/src/components/Hero.jsx:102:145: ERROR: Expected identifier after "http:" in namespaced JSX name
   Plugin: vite:esbuild
   File: /home/workspace/src/components/Hero.jsx:102:145
